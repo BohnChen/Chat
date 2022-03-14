@@ -3,8 +3,8 @@ srcs:=$(wildcard ./Boy/*.cpp)
 objs:=$(srcs:%.cpp=%.o)
 srcs2:=$(wildcard ./Girl/*.cpp)
 objs2:=$(srcs2:%.cpp=%.o)
-out:=Boy
-out2:=Girl
+out:=boy
+out2:=girl
 all:$(out) $(out2)
 $(out2):$(objs2)
 	$(CC) $(objs2) -g -o $(out2) 
