@@ -3,6 +3,7 @@
  * Bohn Chen 2022.03.13
  */
 #include "../Header/GirlH/header.h"
+#include <csignal>
 
 int main(int argc, char* argv[])
 {
@@ -10,6 +11,8 @@ int main(int argc, char* argv[])
 
 	std::cout << "I am coming, too." << std::endl;
 	// char recvBuf[128] { 0 };
+
+	signal(SIGQUIT, sigQuitHandleFunc);
 
 	while (1) {
 		// the below two values must be assigned every time

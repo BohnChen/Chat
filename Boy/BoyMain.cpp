@@ -10,7 +10,9 @@ int main(int argc, char* argv[])
 
 	std::cout << "I am coming!" << std::endl;
 
+	signal(SIGINT, sigIntHandleFunc);
 	while (1) {
+
 		// The two values below should be assigned every time
 		boy.timeout.tv_sec = 5;
 		boy.timeout.tv_usec = 500000;

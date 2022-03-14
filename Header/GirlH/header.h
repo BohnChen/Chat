@@ -1,6 +1,8 @@
 /**
  * the header of girl
  */
+#ifndef __GIRL_HERDER_H__
+#define __GIRL_HERDER_H__
 
 #include <bits/types/struct_timeval.h>
 #include <cstdio>
@@ -10,6 +12,12 @@
 #include <sys/select.h>
 #include <unistd.h>
 #include <sys/time.h>
+#include <csignal>
+
+
+
+void sigQuitHandleFunc(int sigNum);
+
 
 class Girl {
 
@@ -42,3 +50,5 @@ class Girl {
 	char msg[128];
 	fd_set rdset;
 };
+
+#endif

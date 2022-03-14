@@ -1,9 +1,12 @@
 /**
  * the header of boy
  */
+#ifndef __BOY_HEADER_H__
+#define __BOY_HEADER_H__
 
 #include <bits/types/struct_timeval.h>
 #include <csignal>
+#include <signal.h>
 #include <cstdio>
 #include <fcntl.h>
 #include <iostream>
@@ -12,7 +15,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-int sigIntHandlefunc();
+void sigIntHandleFunc(int sigNum);
 
 class Boy {
 
@@ -45,3 +48,5 @@ class Boy {
 	char msg[128];
 	fd_set rdset;
 };
+
+#endif
