@@ -10,11 +10,22 @@ int main(int argc, char* argv[])
 
 	std::cout << "I am coming!" << std::endl;
 
-	while (1) 
-	{
-		boy.addSelectListen();
-		boy.listenFdR();
-		boy.listenStdIn();
+	while (1) {
+		// The two values below should be assigned every time
+		boy.timeout.tv_sec = 5;
+		boy.timeout.tv_usec = 500000;
+		if (boy.addSelectListen() == 0)
+		{
+			std::cout << "boy, you timeout" << std::endl;
+		} else
+		{
+			// The girl ctrl + c offline
+			if (boy.listenFdR() == 0)
+				break;
+			// Boy ctrl + d quit
+			if (boy.listenStdIn() == 0)
+				break;
+		}
 	}
 
 	return 0;

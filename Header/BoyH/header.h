@@ -2,12 +2,17 @@
  * the header of boy
  */
 
+#include <bits/types/struct_timeval.h>
+#include <csignal>
 #include <cstdio>
 #include <fcntl.h>
 #include <iostream>
 #include <string.h>
 #include <sys/select.h>
+#include <sys/time.h>
 #include <unistd.h>
+
+int sigIntHandlefunc();
 
 class Boy {
 
@@ -17,6 +22,8 @@ class Boy {
 			, fdr { open("GirlWBoyR.pipe", O_RDONLY) }
 			, msg { 0 }
 	{
+		timeout.tv_sec = 5;
+		timeout.tv_usec = 500000;
 	}
 
 	// RAII : Resource Acquisition Is Initialization
@@ -29,7 +36,8 @@ class Boy {
 	int addSelectListen();
 	int listenFdR();
 	int listenStdIn();
-	
+
+	struct timeval timeout;
 
 	private:
 	int fdw;
