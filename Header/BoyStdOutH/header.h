@@ -1,9 +1,8 @@
 /**
- * the header of boy
+ * the header of BoyStdOut
  */
-#ifndef __BOY_HEADER_H__
-#define __BOY_HEADER_H__
 
+#include <unistd.h>
 #include <bits/types/struct_timeval.h>
 #include <csignal>
 #include <signal.h>
@@ -24,36 +23,41 @@
 
 void sigIntHandleFunc(int sigNum);
 
-class Boy {
+
+
+class BoyStdOut {
 
 	public:
-	Boy()
-			: fdw { open("BoyWGirlR.pipe", O_WRONLY) }
-			, fdr { open("GirlWBoyR.pipe", O_RDONLY) }
-			, msg { 0 }
+	BoyStdOut()
+			// : fdr { open("GirlWBoyR.pipe", O_RDONLY) }
+			// : pipeMsg { 0 }
+			: shmid { 0 }
+			, shmMsg { 0 }
 	{
 		timeout.tv_sec = 5;
 		timeout.tv_usec = 500000;
 	}
 
 	// RAII : Resource Acquisition Is Initialization
-	~Boy()
+	~BoyStdOut()
 	{
-		close(fdw);
-		close(fdr);
+		delete [] shmMsg;
+		delete [] pipeMsg;
+		shmdt(shmMsg);
+		// close(fdr);
 	}
 
+	int OutPutMsg();
 	int addSelectListen();
 	int listenFdR();
 	int listenStdIn();
-
 	struct timeval timeout;
 
+
 	private:
-	int fdw;
-	int fdr;
-	char msg[128];
+	char *pipeMsg;
+	int shmid;
+	char *shmMsg;
+	// int fdr;
 	fd_set rdset;
 };
-
-#endif

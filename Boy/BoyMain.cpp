@@ -3,11 +3,21 @@
  * Bohn Chen 2022.03.13
  */
 #include "../Header/BoyH/header.h"
+#include <cstring>
 
 int main(int argc, char* argv[])
 {
-	Boy boy;
+	// Boy boy;
+	while ( 1 ) {
+		int shmid = shmget(1000, 4096, IPC_CREAT | 0600);
+		char* p = (char*)shmat(shmid, NULL, 0);
+		ERROR_CHECK(p, (void*)-1, "BoyStdOut : shmat");
 
+		std::cin >> p;
+		// strcpy(p, "Good Job, Man!");
+	}
+
+#if 0
 	std::cout << "I am coming!" << std::endl;
 
 	signal(SIGINT, sigIntHandleFunc);
@@ -29,6 +39,6 @@ int main(int argc, char* argv[])
 				break;
 		}
 	}
-
+#endif
 	return 0;
 }

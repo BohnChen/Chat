@@ -19,3 +19,5 @@ compile it by running `make` in root directory of the project.And then run `./bo
 ## CatchSignal Version
 The boy can catch SIGINIT signal and the girl can catch SIGQUIT signal. And there will be timeout tips both.
 
+## FourWindows Version
+Have some problems
