@@ -6,23 +6,30 @@
 
 #include <bits/types/struct_timeval.h>
 #include <csignal>
-#include <signal.h>
 #include <cstdio>
 #include <fcntl.h>
 #include <iostream>
+#include <signal.h>
 #include <string.h>
 #include <sys/select.h>
-#include <sys/time.h>
-#include <unistd.h>
 #include <sys/shm.h>
+#include <sys/time.h>
 #include <sys/types.h>
+#include <unistd.h>
 
-#define  ERROR_CHECK(ret, errorno, errorInfo) {if (ret == errorno){\
-	std::cerr << errorInfo << std::endl;\
-	return -1;}}\
+#define ERROR_CHECK(ret, errorno, errorInfo) \
+	{                                          \
+		if (ret == errorno) {                    \
+			std::cerr << errorInfo << std::endl;   \
+			return -1;                             \
+		}                                        \
+	}
 
-
-void sigIntHandleFunc(int sigNum);
+struct Data {
+	// 0: read 1:Didn't read 2:over
+	int flag;
+	char msg[1024];
+};
 
 class Boy {
 
@@ -41,12 +48,12 @@ class Boy {
 	{
 		close(fdw);
 		close(fdr);
+		std::cout << "~Boy() exe." << std::endl;
 	}
 
 	int addSelectListen();
-	int listenFdR();
+	int listenFdR(int shmid, struct Data* data);
 	int listenStdIn();
-
 	struct timeval timeout;
 
 	private:
@@ -56,4 +63,6 @@ class Boy {
 	fd_set rdset;
 };
 
+void sigIntHandleFunc(int sigNum);
+int shmM(int flag, char *str, int shmid, struct Data* data);
 #endif

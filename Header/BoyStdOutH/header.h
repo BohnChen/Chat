@@ -1,63 +1,56 @@
 /**
  * the header of BoyStdOut
  */
+#ifndef __BOYSTDOUT_H__
+#define __BOYSTDOUT_H__
 
-#include <unistd.h>
 #include <bits/types/struct_timeval.h>
 #include <csignal>
-#include <signal.h>
 #include <cstdio>
+#include <cstdlib>
 #include <fcntl.h>
 #include <iostream>
+#include <signal.h>
 #include <string.h>
 #include <sys/select.h>
-#include <sys/time.h>
-#include <unistd.h>
 #include <sys/shm.h>
+#include <sys/time.h>
 #include <sys/types.h>
+#include <unistd.h>
 
-#define  ERROR_CHECK(ret, errorno, errorInfo) {if (ret == errorno){\
-	std::cerr << errorInfo << std::endl;\
-	return -1;}}\
+#define ERROR_CHECK(ret, errorno, errorInfo) \
+	{                                          \
+		if (ret == errorno) {                    \
+			std::cerr << errorInfo << std::endl;   \
+			return -1;                             \
+		}                                        \
+	}
 
-
-void sigIntHandleFunc(int sigNum);
-
-
+typedef struct Data {
+	// 1: read 0:Didn't read 2:over
+	int flag;
+	char msg[1024];
+} * pData;
 
 class BoyStdOut {
 
 	public:
 	BoyStdOut()
-			// : fdr { open("GirlWBoyR.pipe", O_RDONLY) }
-			// : pipeMsg { 0 }
 			: shmid { 0 }
-			, shmMsg { 0 }
+			, data { 0 }
 	{
-		timeout.tv_sec = 5;
-		timeout.tv_usec = 500000;
 	}
 
 	// RAII : Resource Acquisition Is Initialization
 	~BoyStdOut()
 	{
-		delete [] shmMsg;
-		delete [] pipeMsg;
-		shmdt(shmMsg);
-		// close(fdr);
+		// shmdt(data);
+		std::cout << "~BoyStdOut() Bye" << std::endl;
 	}
 
 	int OutPutMsg();
-	int addSelectListen();
-	int listenFdR();
-	int listenStdIn();
-	struct timeval timeout;
-
-
-	private:
-	char *pipeMsg;
 	int shmid;
-	char *shmMsg;
-	// int fdr;
-	fd_set rdset;
+	pData data;
 };
+
+#endif

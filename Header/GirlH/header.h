@@ -8,15 +8,32 @@
 #include <cstdio>
 #include <fcntl.h>
 #include <iostream>
-#include <string.h>
+#include <cstring>
 #include <sys/select.h>
 #include <unistd.h>
 #include <sys/time.h>
 #include <csignal>
+#include <sys/msg.h>
 
 
+#define ERROR_CHECK(ret, errorno, errorInfo) \
+	{                                          \
+		if (ret == errorno) {                    \
+			std::cerr << errorInfo << std::endl;   \
+			return -1;                             \
+		}                                        \
+	}
 
 void sigQuitHandleFunc(int sigNum);
+
+
+// rewrite msgbuf
+struct MsgBuf {
+	long mtype;
+	char mtext[128];
+};
+
+
 
 
 class Girl {
@@ -36,11 +53,13 @@ class Girl {
 	{
 		close(fdr);
 		close(fdw);
+		std::cout << "~Girl(): Bye" << std::endl;
 	}
 
 	int addSelectListen();
 	int listenFdR();
 	int listenStdIn();
+	int writeToMsgQ(char *msg, int msgType);
 	
 	struct timeval timeout;
 
@@ -49,6 +68,8 @@ class Girl {
 	int fdw;
 	char msg[128];
 	fd_set rdset;
+	int msgid;
+	struct MsgBuf msgBufStruct;
 };
 
 #endif
